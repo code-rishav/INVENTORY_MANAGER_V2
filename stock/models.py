@@ -25,7 +25,7 @@ class Item(models.Model):
 class Purchase(models.Model):
     item = models.ForeignKey(Item,on_delete=models.PROTECT,default='')
     quantity = models.IntegerField()
-    amount = models.DecimalField(max_digits=6,decimal_places=2) 
+    amount = models.DecimalField(max_digits=9,decimal_places=2) 
     date = models.DateField(auto_now_add=True)
 
     def __str__(self):
@@ -33,10 +33,17 @@ class Purchase(models.Model):
     
 class Dealer(models.Model):
     name = models.CharField(max_length=60,primary_key=True,default='')
-    slug = models.SlugField(blank=True,default='')
     gstin = models.CharField(max_length=30,default='')
-    balance = models.DecimalField(max_digits=6,decimal_places=2,default=0.0,blank=True)
+    balance = models.DecimalField(max_digits=9,decimal_places=2,default=0.0,blank=True)
     address = models.CharField(max_length=70,default='')
+    slug = models.SlugField()
+
+    def __str__(self):
+        return self.name
+    def save(self,*args,**kwargs):
+        if not self.pk:
+            self.slug = slugify(self.name)
+        return super().save(*args,**kwargs)
 
 
 
@@ -54,10 +61,10 @@ class Account(models.Model):
 class Sale(models.Model):
     item = models.ForeignKey(Item,on_delete=models.PROTECT,default='')
     quantity = models.IntegerField(default=0)
-    rate = models.DecimalField(max_digits=7,decimal_places=2)
+    rate = models.DecimalField(max_digits=9,decimal_places=2)
     date = models.DateTimeField(auto_now_add=True)
     dealer = models.ForeignKey(Dealer,on_delete=models.PROTECT,default='')
-    amount = models.DecimalField(max_digits=7,decimal_places=2,default=0)
+    amount = models.DecimalField(max_digits=9,decimal_places=2,default=0)
     
 
     def __str__(self):
@@ -79,7 +86,7 @@ class Invoice(models.Model):
     invoiceId = models.CharField(max_length=20,default='')
     dealer = models.ForeignKey(Dealer,on_delete=models.PROTECT)
     date = models.DateTimeField(auto_now_add=True)
-    amount = models.DecimalField(max_digits=10,decimal_places=2)
+    amount = models.DecimalField(max_digits=9,decimal_places=2)
 
     def __str__(self):
         return self.dealer.name +"-"+ str(self.date)
@@ -87,7 +94,7 @@ class Invoice(models.Model):
 class Recieving(models.Model):
     dealer = models.ForeignKey(Dealer,on_delete=models.PROTECT)
     date = models.DateField(auto_now_add=True)
-    amount = models.DecimalField(max_digits=8,decimal_places=2)
+    amount = models.DecimalField(max_digits=9,decimal_places=2)
 
     def __str__(self):
         return self.dealer.name +"-"+ str(self.date)

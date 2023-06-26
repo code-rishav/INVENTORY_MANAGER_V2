@@ -20,12 +20,11 @@ from stock import views
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('dealer/',views.dealer,name='dealer'),
-    #path('stock/<int:id>/',views.detail,name='detail'),
-    path('dealer/<slug:slug>/',views.dealer,name='dealer'),
     path('sale-entry/',views.entryForm,name='entryForm'),
+    path('dealer/<slug:slug>',views.dealer,name='dealer')
     path('bill/',views.generateBill,name='bill'),
     path('bills/',views.createBill,name='createbill'),
     path('accounts/',views.updateAccounts,name='updateaccounts'),
-    path('homepage/',views.homepage,name='homepage'),
-    path('',views.index,name='index'),
+    path('',views.homepage,name='homepage'),
+    path('accounts/login/',views.index,name='index'),
 ]

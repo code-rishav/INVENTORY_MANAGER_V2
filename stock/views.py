@@ -13,7 +13,7 @@ from django.template.loader import get_template
 # Create your views here.
 def dealer(request,slug=None):
     dealer = get_object_or_404(Dealer,slug=slug)
-
+    
     return render(request,'stock/dealer.html',{'dealer':dealer})
 
 @login_required
@@ -88,6 +88,14 @@ def entryForm(request):
             items = Stock.objects.get(item=item)
             items.quantity = items.quantity + int(quantity)
             items.save()
+        
+        elif request.POST.get("newDealer"):
+            dealer = request.POST.dict()
+            dealer_name  = dealer.get("dealername")
+            gstin = dealer.get("gstin")
+            address = dealer.get("address")
+            dealerobj = Dealer(name=dealer_name,gstin=gstin,address=address)
+            dealerobj.save()
     
     return render(request,'stock/sale-form.html',{'items':all_items})
 
@@ -115,9 +123,14 @@ def generateBill(request):
         print(dealername,totalSum,invoiceId,invoiceDate)
         
         #update dealer data
-        dealer = Dealer.objects.get(name=dealername)
+        dealer = get_object_or_404(Dealer,name=dealername)
+        print(dealer.name)
+        print(dealer.balance)
         dealer.balance = float(dealer.balance) + float(totalSum)
+        print(dealer.balance)
+        print("updated balance")
         dealer.save()
+        print("saved")
         
 
 
@@ -141,8 +154,8 @@ def generateBill(request):
     return render(request,'stock/bill-template.html',{'buyer':buyer,'items':items,'buyer_json':buyer_json})
     
 
-@login_required
 def updateTables(row,dealer):
+    print("inside update tables")
     name = row['item']
     rate = float(row['rate'])
     quantity = int(row['quantity'])

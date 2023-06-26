@@ -13,7 +13,7 @@
   </head>
   <body>
     <div id="mysidenav" class="sidenav">
-      <span><a href="{% url 'index' %}">HOME</a></span>   
+      <span><a href="{% url 'homepage' %}">HOME</a></span>   
       
      
      </div>
@@ -57,13 +57,13 @@
 
       <div class="form-container">
         <div class="ientry">
-          <h1>Item Form</h1>
+          <h1>New Item Entry</h1>
           
           <form method="post" action="#">
             {% csrf_token %}
               <div class="form-group">
-                <label for="itemname"></label>
-                <input class="'fname" type="text" name="itemname" placeholder="'Item Name">
+                <label for="itemname">Item Name</label>
+                <input class="'fname" type="text" name="itemname" placeholder="Item Name">
               </div>
               <div class="form-group">
                 <label for="quantity">Packets per box</label>
@@ -82,6 +82,31 @@
               </div>
           </form>
         </div>
+
+        <div class="form-container">
+          <div class="ientry">
+            <h1>New Dealer Entry</h1>
+            
+            <form method="post" action="#">
+              {% csrf_token %}
+                <div class="form-group">
+                  <label for="itemname">Dealer Name</label>
+                  <input class="fname" type="text" name="dealername" placeholder="Dealer Name">
+                </div>
+                <div class="form-group">
+                  <label for="quantity">GSTIN</label>
+                  <input class="fname" type="text" name="gstin" placeholder="GSTIN">
+                </div>
+                <div class="form-group">
+                  <label for="mrp">ADDRESS</label>
+                  <input class="fname" type="text" name="address" placeholder="ADDRESS">
+                </div>
+                
+                <div class="form-group">
+                  <button type="submit" name="newDealer" value="newDealer" class="button">Submit</button>
+                </div>
+            </form>
+          </div>
       </div>
 
       
