@@ -1,5 +1,6 @@
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render,get_object_or_404,redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate,login,logout 
 from django.utils.html import format_html
 import json
 from json import dumps
@@ -15,8 +16,8 @@ def dealer(request,slug=None):
 
     return render(request,'stock/dealer.html',{'dealer':dealer})
 
-
-def index(request):
+@login_required
+def homepage(request):
     items = Item.objects.all()
     purchase = reversed(Purchase.objects.all())
     sale = reversed(Sale.objects.all())
@@ -26,6 +27,24 @@ def index(request):
     context = {'items':items,'purchase':purchase,'sale':sale,'stock':stock,'dealers':dealers,'recievings':recievings}
     return render(request,'stock/stocks.html',context)
 
+def index(request):
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('homepage')
+        else:
+            # Handle invalid login
+            pass
+    return render(request, 'stock/login.html')
+
+def logout_view(request):
+    logout(request)
+    return redirect('login')
+
+@login_required
 def detail(request,id=None):
     purchase = get_object_or_404(Purchase,id=id)
     return render(request,'stock/detail.html',{'purchase':purchase})
@@ -33,7 +52,7 @@ def detail(request,id=None):
 
 
 
-
+@login_required
 def entryForm(request):
 
     all_items = Item.objects.all()
@@ -72,7 +91,7 @@ def entryForm(request):
     
     return render(request,'stock/sale-form.html',{'items':all_items})
 
-
+@login_required
 def generateBill(request):
     print("in generate bills***************")
     items = Item.objects.all()
@@ -122,7 +141,7 @@ def generateBill(request):
     return render(request,'stock/bill-template.html',{'buyer':buyer,'items':items,'buyer_json':buyer_json})
     
 
-
+@login_required
 def updateTables(row,dealer):
     name = row['item']
     rate = float(row['rate'])
@@ -140,14 +159,14 @@ def updateTables(row,dealer):
     sale.save()
     return
 
-
+@login_required
 def createBill(request):
     item = Item.objects.all()
 
     return render(request,'stock/bill-template.html',{'items':item})
 
 
-
+@login_required
 def updateAccounts(request):
 
     dealers = Dealer.objects.all()

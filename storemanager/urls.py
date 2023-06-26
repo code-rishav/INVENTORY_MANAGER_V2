@@ -26,5 +26,6 @@ urlpatterns = [
     path('bill/',views.generateBill,name='bill'),
     path('bills/',views.createBill,name='createbill'),
     path('accounts/',views.updateAccounts,name='updateaccounts'),
+    path('homepage/',views.homepage,name='homepage'),
     path('',views.index,name='index'),
 ]
