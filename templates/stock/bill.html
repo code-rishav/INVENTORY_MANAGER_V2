@@ -1,0 +1,78 @@
+{%load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{%static 'stock/form.css' %}">
+
+    <title>Document</title>
+</head>
+<body>
+    <div id="mysidenav" class="sidenav">
+        <span><a href="{% url 'index' %}">HOME</a></span>   
+    </div>
+
+    <div class="container">
+            <div class="main-block left-div">
+
+                
+                <div class="sale-entry">
+                    <h1>Sale Form</h1>
+                    <form action="#" method="post">
+                            <div class="info">
+                            <span>Order Date</span>
+                            <input type="date" name="date">
+                            
+                            <input list="brow" class="fname" placeholder="Shop" name="dealer">
+                                <datalist id="brow">
+                                    
+                                </datalist>  
+
+                            <table id="itemsTable" class="items">
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Rate</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                </tr>
+
+                                <tr>
+                                    <td><input list="brow" name="item[]" placeholder="Item Name">
+                                        <datalist id="brow">
+                                            {%for item in items %}
+                                                <option value="{{item.name}}">{{item.name}}</option>
+                                            {%endfor%}
+                                        </datalist> 
+                                    </td>
+                                    <td> <input class="" type="number" name="quantity[]" placeholder="Quantity"></td>
+                                    <td><input class="" type="number" step=".001" name="rate[]" placeholder="Rate"></td>
+                                </tr>
+
+                            </table>
+                            <button id="addItem" class="" type="button" name="addItem" value="addItem" onclick="addItemTable()">+Add Item</button>
+                            <button id="newItem" type="submit" name="newBill" value="newBill" class="button">Submit</button>
+                    </form>
+                </div>
+                
+            </div>
+
+            <div class= "right-div" id="addItemModal">
+                    <form id="newItemForm" action="{%static 'stock/form.js'%}" method="post">
+                        {% csrf_token%}
+                        <div class="">
+                            <input list="brow" name="item" placeholder="Item Name">
+                    <datalist id="brow">
+                        {%for item in items %}
+                            <option value="{{item.name}}">{{item.name}}</option>
+                        {%endfor%}
+                    </datalist> 
+                            <input class="" type="number" name="quantity" placeholder="Quantity">
+                            <input class="" type="number" step=".001" name="rate" placeholder="Rate">
+                            
+                    </form>
+            </div>
+        </div>
+</body>
+<script src="{% static 'stock/form.js' %}"></script>
+</html> 

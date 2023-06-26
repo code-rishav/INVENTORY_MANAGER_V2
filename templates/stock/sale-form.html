@@ -1,0 +1,91 @@
+{%load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Order form</title>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="{%static 'stock/form-template.css' %}">
+    <link rel="stylesheet" href="{% static 'stock/stock.css' %}">
+    <style>
+     
+    </style>
+  </head>
+  <body>
+    <div id="mysidenav" class="sidenav">
+      <span><a href="{% url 'index' %}">HOME</a></span>   
+      
+     
+     </div>
+     <div>
+
+    <div class="main-block">
+
+      
+
+      <div class="form-container">
+        <h1>Purchase Form</h1>
+        
+        <form action="#" method="post">
+          {% csrf_token %}
+              <div class="form-group">
+                <label for="date">Order Date</label>
+                <input type="date" name="date">
+              </div>
+
+              <div class="form-group">
+                <label for="item">Item Name</label>
+              <input list="brow" name="item" placeholder="Item Name">
+              <datalist id="brow" name="item">
+                  {%for item in items %}
+                    <option value="{{item.name}}">{{item.name}}</option>
+                  {%endfor%}
+              </datalist>
+              </div>  
+               
+              <div class="form-group">
+                <label for="qunatity">Quantity</label>
+                <input class="text" type="number" name="quantity" placeholder="Quantity">
+              </div>
+              
+             
+              <div class="form-group">
+                <button type="submit" name="newPurchase" value="newPurchase" class="button">Submit</button>
+              </div>
+        </form>
+      </div>
+
+      <div class="form-container">
+        <div class="ientry">
+          <h1>Item Form</h1>
+          
+          <form method="post" action="#">
+            {% csrf_token %}
+              <div class="form-group">
+                <label for="itemname"></label>
+                <input class="'fname" type="text" name="itemname" placeholder="'Item Name">
+              </div>
+              <div class="form-group">
+                <label for="quantity">Packets per box</label>
+                <input class="fname" type="number" name="packets" placeholder="Quantity">
+              </div>
+              <div class="form-group">
+                <label for="mrp">MRP</label>
+                <input class="fname" type="number" name="mrp" placeholder="MRP">
+              </div>
+              <div class="form-group">
+                <label for="mrp">Invoice Rate</label>
+                <input class="fname" type="number" name="invoice-rate" placeholder="Invoice Rate">
+              </div>
+              <div class="form-group">
+                <button type="submit" name="newItem" value="newItem" class="button">Submit</button>
+              </div>
+          </form>
+        </div>
+      </div>
+
+      
+    </div>
+    <script src="{% static 'stock/form.js' %}"></script>
+  </body>
+</html>
