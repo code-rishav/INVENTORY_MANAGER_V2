@@ -77,8 +77,11 @@ WSGI_APPLICATION = "storemanager.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": 'inventorydb',
+        "USER": 'admin',
+        "PASSWORD": 'Iamrishav@0804',
+        "HOST": 'localhost'
     }
 }
 
