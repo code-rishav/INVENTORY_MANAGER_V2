@@ -1,0 +1,50 @@
+{%load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{%static 'stock/stock.css'%}">
+    <title>Document</title>
+</head>
+<body>
+    <div id="mysidenav" class="sidenav">
+        
+        <span><a href="{%url 'homepage'%}">BACK</a></span>
+        <span><a href="{% url 'homepage' %}">HOME</a></span> 
+       
+    </div>
+
+    <div class="">
+        <div>
+            <h2>Dealer Name : 
+               {{dealer.name}}
+            </h2>
+            
+            
+           <table id="tableData_p">
+               <tr>
+                   <th>TRANSACTION</th>
+                   <th>Date</th>
+                   <th>Amount</th>
+                   <th>Balance</th>
+               </tr>
+               
+                   {% if recievings %}
+                        {% for r in recievings %}
+                        <tr>
+                            <td>{{ r.type }}</td>
+                            <td>{{ r.date }}</td>
+                            <td>{{r.amount}}</td>
+                           <td>{{r.balance}}</td>
+                        </tr>
+                        {% endfor %}
+                   {% else %}
+                        <p>NO DATA</p>
+                   {% endif %}
+                
+           </table>
+       </div>
+
+</body>
+</html>

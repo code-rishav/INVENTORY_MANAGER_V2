@@ -50,6 +50,7 @@ function addItemToTable() {
 	cumSum.textContent = cumTotal.toFixed(2);
 
     // Reset the input fields of the second form
+	document.getElementById("newItemForm").reset()
     
 }
 
@@ -142,16 +143,6 @@ function generatePDF(){
 	  elementsToExclude[i].style.display = 'none';
 	}
   
-	/*html2pdf()
-	  .set({
-		margin: 8,
-		filename: 'converted.pdf',
-		html2canvas: { scale: 10 },
-		jsPDF: { format: 'A4', orientation: 'portrait' },
-		canvas: { width: contentWidth, height: contentHeight },
-	  })
-	  .from(element)
-	  .save();*/
 	  window.jsPDF = window.jspdf.jsPDF;
 	  html2canvas(element).then(function (canvas) {
 		var imgData = canvas.toDataURL('image/png');

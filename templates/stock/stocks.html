@@ -104,7 +104,7 @@
                         {% for p in sale %}
                         <tr>
                             <td>{{ p.item }}</td>
-                            <td>{{p.dealer}}</td>
+                            <td>{{p.dealer.name}}</td>
                             <td>{{ p.date }}</td>
                             <td>{{p.rate}}</td>
                             <td>{{p.quantity}}</td>
@@ -175,7 +175,7 @@
             {% if dealers %}
             {% for dealer in dealers %}
             <tr>
-                <td>{{ dealer.name }}</td>
+                <td><a href="{% url 'dealer' slug=dealer.slug%}" style="text-decoration: none; color:black">{{ dealer.name }}</a></td>
                 <td>{{dealer.gstin}}</td>
                 <td>{{ dealer.address}}</td>
                 <td>{{ dealer.balance}}</td>
@@ -188,7 +188,7 @@
      </table>
     </div>
 
-    <div class="recievings">
+    <div class="recievings" id="recieve">
         <h2>RECIEVINGS TABLE</h2>
      <table>
          <tr>

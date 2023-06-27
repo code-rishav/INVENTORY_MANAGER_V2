@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.text import slugify
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
+
 
 # Create your models here.
 class Item(models.Model):
@@ -41,8 +43,8 @@ class Dealer(models.Model):
     def __str__(self):
         return self.name
     def save(self,*args,**kwargs):
-        if not self.pk:
-            self.slug = slugify(self.name)
+
+        self.slug = slugify(self.name)
         return super().save(*args,**kwargs)
 
 
@@ -95,6 +97,15 @@ class Recieving(models.Model):
     dealer = models.ForeignKey(Dealer,on_delete=models.PROTECT)
     date = models.DateField(auto_now_add=True)
     amount = models.DecimalField(max_digits=9,decimal_places=2)
+
+    #create text choice for type of receiving
+    rcv_choice = [
+        ('BORROW',_('B')),
+        ('PAID',_('P')),
+    ]
+    type = models.CharField(max_length=6,choices=rcv_choice)
+    balance = models.DecimalField(max_digits=9,decimal_places=2)
+
 
     def __str__(self):
         return self.dealer.name +"-"+ str(self.date)

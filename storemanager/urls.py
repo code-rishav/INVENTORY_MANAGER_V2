@@ -21,7 +21,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path('dealer/',views.dealer,name='dealer'),
     path('sale-entry/',views.entryForm,name='entryForm'),
-    path('dealer/<slug:slug>',views.dealer,name='dealer')
+    path('dealer/<slug:slug>',views.dealer,name='dealer'),
     path('bill/',views.generateBill,name='bill'),
     path('bills/',views.createBill,name='createbill'),
     path('accounts/',views.updateAccounts,name='updateaccounts'),

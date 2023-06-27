@@ -12,9 +12,9 @@ from django.template.loader import render_to_string
 from django.template.loader import get_template
 # Create your views here.
 def dealer(request,slug=None):
-    dealer = get_object_or_404(Dealer,slug=slug)
-    
-    return render(request,'stock/dealer.html',{'dealer':dealer})
+    dealer = Dealer.objects.get(slug=slug)
+    recieving = reversed(Recieving.objects.filter(dealer=dealer))
+    return render(request,'stock/dealer.html',{'recievings':recieving,'dealer':dealer})
 
 @login_required
 def homepage(request):
@@ -123,7 +123,7 @@ def generateBill(request):
         print(dealername,totalSum,invoiceId,invoiceDate)
         
         #update dealer data
-        dealer = get_object_or_404(Dealer,name=dealername)
+        dealer = Dealer.objects.get(name=dealername)
         print(dealer.name)
         print(dealer.balance)
         dealer.balance = float(dealer.balance) + float(totalSum)
@@ -132,7 +132,6 @@ def generateBill(request):
         dealer.save()
         print("saved")
         
-
 
         invoice = Invoice(invoiceId=invoiceId,date=invoiceDate,dealer=dealer,amount=totalSum)
         invoice.save()
@@ -145,7 +144,7 @@ def generateBill(request):
         print(table_data)
 
         for row in table_data:
-            updateTables(row,dealer)
+            updateTables(row,dealer,invoiceDate)
         
 
         return render(request,'stock/bill-template.html',{'items':items,'dealer':dealer})
@@ -154,7 +153,7 @@ def generateBill(request):
     return render(request,'stock/bill-template.html',{'buyer':buyer,'items':items,'buyer_json':buyer_json})
     
 
-def updateTables(row,dealer):
+def updateTables(row,dealer,invoiceDate):
     print("inside update tables")
     name = row['item']
     rate = float(row['rate'])
@@ -167,9 +166,13 @@ def updateTables(row,dealer):
     itemS.save()
 
     #create sale entry
-    sale = Sale(item=item,quantity=quantity,rate=rate,dealer=dealer,amount=total)
+    sale = Sale(item=item,quantity=quantity,date=invoiceDate,rate=rate,dealer=dealer,amount=total)
     print(sale)
     sale.save()
+
+    #insert new data to recieving table
+    recieving = Recieving(dealer=dealer,date=invoiceDate,amount=total,balance=dealer.balance,type='BORROW')
+    recieving.save()
     return
 
 @login_required
@@ -200,7 +203,7 @@ def updateAccounts(request):
         
         
 
-        recieving = Recieving(dealer=dealer,date=date,amount=amount)
+        recieving = Recieving(dealer=dealer,date=date,amount=amount,balance=updateDealer.balance,type='PAID')
         recieving.save()
 
 
