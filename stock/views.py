@@ -79,7 +79,6 @@ def entryForm(request):
             quantity = purchase.get("quantity")
             date = purchase.get("date")
             amount = float(quantity) * float(item.invoice_rate)
-            print("post method items",quantity,date,item,amount,"Item invoice rate",item.invoice_rate)
 
             newPurchase = Purchase(item=item,quantity=quantity,date=date,amount=amount)
             newPurchase.save()
@@ -101,18 +100,13 @@ def entryForm(request):
 
 @login_required
 def generateBill(request):
-    print("in generate bills***************")
     items = Item.objects.all()
-    billItem = dict()
-    countItem = 0
     #retrieve all necessary data to send to the html page
     buyer = Dealer.objects.all()
     buyer_json = serializers.serialize('json',  buyer)
 
 
     if request.method=="POST":
-        print("after post method")
-        print("inside submit call")
         data = json.loads(request.body)
 
         #generate invoice data and add it to database
@@ -120,17 +114,11 @@ def generateBill(request):
         totalSum = data.get('finalSum')
         invoiceId = data.get('invoiceId')
         invoiceDate = data.get('invoiceDate')
-        print(dealername,totalSum,invoiceId,invoiceDate)
         
         #update dealer data
         dealer = Dealer.objects.get(name=dealername)
-        print(dealer.name)
-        print(dealer.balance)
         dealer.balance = float(dealer.balance) + float(totalSum)
-        print(dealer.balance)
-        print("updated balance")
         dealer.save()
-        print("saved")
         
 
         invoice = Invoice(invoiceId=invoiceId,date=invoiceDate,dealer=dealer,amount=totalSum)
@@ -140,8 +128,6 @@ def generateBill(request):
         
         
         table_data =  data.get('tabledata',[])
-        print("data in post method")
-        print(table_data)
 
         for row in table_data:
             updateTables(row,dealer,invoiceDate)
@@ -154,7 +140,6 @@ def generateBill(request):
     
 
 def updateTables(row,dealer,invoiceDate):
-    print("inside update tables")
     name = row['item']
     rate = float(row['rate'])
     quantity = int(row['quantity'])
@@ -167,7 +152,6 @@ def updateTables(row,dealer,invoiceDate):
 
     #create sale entry
     sale = Sale(item=item,quantity=quantity,date=invoiceDate,rate=rate,dealer=dealer,amount=total)
-    print(sale)
     sale.save()
 
     #insert new data to recieving table
@@ -192,8 +176,6 @@ def updateAccounts(request):
         date = data.get("date")
         amount = float(data.get("amount"))
 
-        print(name,date,amount)
-
         dealer = Dealer(name=name)
 
         #update the balance amount 
@@ -201,8 +183,6 @@ def updateAccounts(request):
         updateDealer.balance = float(updateDealer.balance) - (amount)
         updateDealer.save()
         
-        
-
         recieving = Recieving(dealer=dealer,date=date,amount=amount,balance=updateDealer.balance,type='PAID')
         recieving.save()
 

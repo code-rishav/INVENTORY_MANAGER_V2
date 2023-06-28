@@ -81,18 +81,15 @@ function addDealer(){
 	holder.textContent = buyer;
 
 	//this dealerData object has been parsed in the script part of html filed
-	console.log(dealerData)
 	for(var i=0;i<dealerData.length;i++){
 		var dealerobject = dealerData[i];
 		
 
 		var name = dealerobject.pk;
 		if(name==buyer){
-			console.log(name);
 			break;
 		}
 	}
-	console.log(dealerobject.address,dealerobject.gstin);
 	var address = document.getElementById("address");
 	address.textContent = dealerobject.fields.address;
 	var gstin = document.getElementById("gstin");
@@ -128,17 +125,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function generatePDF(){
 	var element = document.getElementById('invoice-box');
-	console.log(element);
 	// Measure the dimensions of the HTML content
 	var contentWidth = element.offsetWidth;
 	var contentHeight = element.offsetHeight;
-	console.log(contentWidth);
-	console.log(contentHeight);
+	
   
 	// Apply CSS rule to hide the elements to be excluded
 	//document.querySelectorAll(".exclude").style.display = 'none';
 	var elementsToExclude = document.getElementsByClassName('exclude');
-	console.log(elementsToExclude);
+	
 	for (var i = 0; i < elementsToExclude.length; i++) {
 	  elementsToExclude[i].style.display = 'none';
 	}
@@ -173,7 +168,7 @@ function generatePDF(){
 		  elementsToExclude[i].style.display = '';
 		}
 	  });
-	  console.log("submitted data")
+	  
 	  document.getElementById("newItemForm").reset();
 }
   
@@ -183,8 +178,6 @@ $(document).ready(function() {
 	$('#generateBill').click(function() {
 	  
 	  var data = [];
-	  console.log("called generatePDF");
-	  console.log("after generatePDF");
 	  
 	  // Iterate over the table rows except for the header row
 	  $('#itemsTable tr.item-list').each(function(index, row) {
@@ -195,10 +188,7 @@ $(document).ready(function() {
 			var quantity = $(this).find('td.quantity').text().trim();
 			var rate = $(this).find('td.rate').text().trim();
 			var total = $(this).find('td.total').text().trim();
-			console.log(item)
-			console.log(rate)
-			console.log(quantity)
-			console.log(total)
+			
             // Populate the rowData object
 
             rowData['item'] = item;
@@ -237,12 +227,11 @@ $(document).ready(function() {
 		success: function(response) {
 			// Handle the successful response from the server
 			// Refresh the page
-			console.log("submitted");
+			alert("SUBMISSION SUCCESSFUL");
 			generatePDF();
 		},
 		error: function(xhr, textStatus, error) {
 		  // Handle any errors that occur during the AJAX request
-		  console.log(error);
 		}
 	  });
 	  

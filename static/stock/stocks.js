@@ -97,7 +97,6 @@ function searchbyDate_purchase() {
             var temp1 = new Date(startDateArr[j]);
                 if(+temp1 >= +startDate && +temp1 <= +endDate) {
                     tr[j + 1].style.display = "";
-                    console.log(price[j+1])
                     sum_p  = sum_p+price[j]
                 } else {
                     tr[j + 1].style.display = "none";
@@ -140,7 +139,6 @@ function searchbyDate_sale() {
             var temp1 = new Date(startDateArr[j]);
                 if(+startDate <= +temp1 || +startDate === +temp1) {
                     tr[j + 1].style.display = "";
-                    console.log(price[j+1])
                     sum_p  = sum_p+price[j]
                 } else {
                     tr[j + 1].style.display = "none";
