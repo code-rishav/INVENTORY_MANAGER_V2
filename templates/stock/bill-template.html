@@ -91,7 +91,7 @@
             <button class="exclude" type="button" data-toggle="dealerModal" data-target="#dealerModal">Select Dealer</button>
             <button type="button" data-toggle="myModal" class="additem" data-target="#myModal">+Add Item</button>
             <button type="button" class="deleteitem" onclick="deleteLastItemFromTable()">Dlete last Item</button>
-            <button class="exclude" id="generateBill" name="newBill" value="newBill">SUBMIT</button>
+            <button class="exclude" id="generateBill" name="newBill" value="newBill"onclick="this.disabled=true" >SUBMIT</button>
            <button class="exclude" onclick="refreshPage()" >REFRESH</button>
            <button class="home" onclick="window.location.href = '{%url 'homepage'%}';">HOME</button>
           </div>

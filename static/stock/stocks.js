@@ -5,7 +5,6 @@ purchase.addEventListener("click",function(event){
     st.style.display = "none"
     it.style.display = "none"
     dlr.style.display = "none"
-    rcv.style.display = "none"
     pur.style.display = "initial";
 })
 
@@ -16,7 +15,6 @@ sale.addEventListener("click",function(event){
     st.style.display = "none"
     it.style.display = "none"
     dlr.style.display = "none"
-    rcv.style.display = "none"
     s.style.display = "initial"
     
 })
@@ -28,7 +26,6 @@ stock.addEventListener("click",function(event){
     s.style.display = "none"
     it.style.display = "none"
     dlr.style.display = "none"
-    rcv.style.display = "none"
     st.style.display = "initial"
 })
 
@@ -39,7 +36,6 @@ item.addEventListener("click",function(event){
     s.style.display = "none"
     st.style.display = "none"
     dlr.style.display = "none"
-    rcv.style.display = "none"
     it.style.display = "initial"
     
 })
@@ -51,20 +47,9 @@ dealer.addEventListener("click",function(event){
     s.style.display = "none"
     st.style.display = "none"
     it.style.display = "none"
-    rcv.style.display = "none"
     dlr.style.display = "initial"
 })
 
-var rcv = document.querySelector(".recievings")
-var recieving = document.querySelector(".rcv")
-recieving.addEventListener("click",function(event){
-    pur.style.display = "none"
-    s.style.display = "none"
-    st.style.display = "none"
-    it.style.display = "none"
-    dlr.style.display = "none"
-    rcv.style.display = "initial"
-})
 
 function searchbyDate_purchase() {
     var startDateArr = [];
@@ -150,3 +135,14 @@ function searchbyDate_sale() {
     sum_p = 0.0
 }
 
+document.addEventListener('DOMContentLoaded',function (){
+	var dealerTab = document.getElementById("dealers_d");
+	var total = 0;
+	for(i=2;i<dealerTab.rows.length;i++){
+		var obj = dealerTab.rows.item(i).cells;
+		var bal = parseFloat(obj.item(3).innerHTML);
+		total += bal;
+	}
+	document.getElementById('dealerHead').innerText = "DEALER TABLE: "+(dealerTab.rows.length-1);
+	document.getElementById('dealerTotal').innerText = "TOTAL : "+total;
+});

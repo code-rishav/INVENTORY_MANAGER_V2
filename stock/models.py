@@ -35,7 +35,7 @@ class Purchase(models.Model):
     
 class Dealer(models.Model):
     name = models.CharField(max_length=60,primary_key=True,default='')
-    gstin = models.CharField(max_length=30,default='')
+    gstin = models.CharField(max_length=30,default='',blank=True)
     balance = models.DecimalField(max_digits=9,decimal_places=2,default=0.0,blank=True)
     address = models.CharField(max_length=70,default='')
     slug = models.SlugField()

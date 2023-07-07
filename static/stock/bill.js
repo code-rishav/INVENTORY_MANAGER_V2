@@ -214,6 +214,11 @@ $(document).ready(function() {
 		tabledata : data
 	  };
 	  
+	 if(requestData == undefined){
+		alert("Empty Data");
+		return;
+	}
+	  
 
 
 	  
@@ -227,8 +232,8 @@ $(document).ready(function() {
 		success: function(response) {
 			// Handle the successful response from the server
 			// Refresh the page
-			alert("SUBMISSION SUCCESSFUL");
 			generatePDF();
+			window.location.reload()
 		},
 		error: function(xhr, textStatus, error) {
 		  // Handle any errors that occur during the AJAX request

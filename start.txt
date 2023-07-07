@@ -1,0 +1,38 @@
+@echo off
+
+REM Change to the appropriate directory where your Django app is located
+cd C:\path\to\your\django\app
+
+REM Activate the virtual environment if necessary
+REM activate
+
+REM Create a timestamp for the backup file name
+set datetime=%date:~-4%-%date:~3,2%-%date:~0,2%_%time:~0,2%-%time:~3,2%-%time:~6,2%
+set datetime=%datetime: =0%
+
+REM Set the backup directory path
+set backup_dir=C:\path\to\your\django\app\backup
+
+REM Create the backup directory if it doesn't exist
+if not exist "%backup_dir%" mkdir "%backup_dir%"
+
+REM Backup the database
+REM Replace `db_name` with the actual name of your database
+REM Replace `db_user` and `db_password` with the appropriate database credentials
+pg_dump -U db_user -W -F p db_name > "%backup_dir%\database_backup_%datetime%.sql"
+
+REM Backup the media files
+REM Replace `media_dir` with the actual path to your media files directory
+xcopy /E /I "C:\path\to\your\django\app\media" "%backup_dir%\media_backup_%datetime%"
+
+REM Backup the static files
+REM Replace `static_dir` with the actual path to your static files directory
+xcopy /E /I "C:\path\to\your\django\app\static" "%backup_dir%\static_backup_%datetime%"
+
+REM Compress the backup directory into a single ZIP file
+REM Make sure you have 7-Zip or a similar archiving utility installed
+REM Replace `zip_path` with the path to your 7-Zip installation directory
+REM Replace `backup_zip` with the desired name for the backup ZIP file
+"C:\path\to\7-Zip\7z.exe" a -r "%backup_dir%\backup_zip_%datetime%.zip" "%backup_dir%"
+
+echo Backup completed successfully.

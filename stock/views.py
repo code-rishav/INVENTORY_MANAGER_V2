@@ -16,35 +16,20 @@ def dealer(request,slug=None):
     recieving = reversed(Recieving.objects.filter(dealer=dealer))
     return render(request,'stock/dealer.html',{'recievings':recieving,'dealer':dealer})
 
-@login_required
 def homepage(request):
     items = Item.objects.all()
     purchase = reversed(Purchase.objects.all())
     sale = reversed(Sale.objects.all())
-    stock = Stock.objects.all()
-    dealers = Dealer.objects.all()
+    stock = Stock.objects.order_by('-quantity')
+    dealers = Dealer.objects.order_by('name')
     recievings = Recieving.objects.all()
     context = {'items':items,'purchase':purchase,'sale':sale,'stock':stock,'dealers':dealers,'recievings':recievings}
     return render(request,'stock/stocks.html',context)
-
-def index(request):
-    if request.method == "POST":
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('homepage')
-        else:
-            # Handle invalid login
-            pass
-    return render(request, 'stock/login.html')
 
 def logout_view(request):
     logout(request)
     return redirect('login')
 
-@login_required
 def detail(request,id=None):
     purchase = get_object_or_404(Purchase,id=id)
     return render(request,'stock/detail.html',{'purchase':purchase})
@@ -52,7 +37,7 @@ def detail(request,id=None):
 
 
 
-@login_required
+
 def entryForm(request):
 
     all_items = Item.objects.all()
@@ -68,14 +53,13 @@ def entryForm(request):
             newItem.save()
 
             #add this item to stock table
-            sitem = Item(name=name)
-            newStock = Stock(item=sitem,quantity=0)
+            newStock = Stock(item=newItem,quantity=0)
             newStock.save()
 
         elif request.POST.get("newPurchase"):
             purchase = request.POST.dict()
-            itemobj = Item(name=purchase.get("item"))
-            item  = Item.objects.get(name=itemobj.name)
+            itemname = purchase.get("item")
+            item  = Item.objects.get(name=itemname)
             quantity = purchase.get("quantity")
             date = purchase.get("date")
             amount = float(quantity) * float(item.invoice_rate)
@@ -98,7 +82,7 @@ def entryForm(request):
     
     return render(request,'stock/sale-form.html',{'items':all_items})
 
-@login_required
+
 def generateBill(request):
     items = Item.objects.all()
     #retrieve all necessary data to send to the html page
@@ -124,15 +108,19 @@ def generateBill(request):
         invoice = Invoice(invoiceId=invoiceId,date=invoiceDate,dealer=dealer,amount=totalSum)
         invoice.save()
 
+        #insert new data to recieving table
+        recieving = Recieving(dealer=dealer,date=invoiceDate,amount=float(totalSum),balance=dealer.balance,type='BORROW')
+        recieving.save()
+
+
         #create data for sales table
         
         
         table_data =  data.get('tabledata',[])
-
+        
         for row in table_data:
             updateTables(row,dealer,invoiceDate)
-        
-
+            
         return render(request,'stock/bill-template.html',{'items':items,'dealer':dealer})
         
 
@@ -154,19 +142,17 @@ def updateTables(row,dealer,invoiceDate):
     sale = Sale(item=item,quantity=quantity,date=invoiceDate,rate=rate,dealer=dealer,amount=total)
     sale.save()
 
-    #insert new data to recieving table
-    recieving = Recieving(dealer=dealer,date=invoiceDate,amount=total,balance=dealer.balance,type='BORROW')
-    recieving.save()
-    return
+    
+    return total
 
-@login_required
+
 def createBill(request):
     item = Item.objects.all()
 
     return render(request,'stock/bill-template.html',{'items':item})
 
 
-@login_required
+
 def updateAccounts(request):
 
     dealers = Dealer.objects.all()

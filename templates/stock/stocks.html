@@ -22,15 +22,14 @@
     </ul>
     <div id="mysidenav" class="sidenav">
         
-        <span><a href="{% url 'index' %}">HOME</a></span> 
+        
         <span><a href="{%url 'admin:index' %}">ADMIN</a></span>  
         <span class="buy">PURCHASE</span>
         <span class="sold">SALE</span>
         <span class="st">STOCK</span>
         <span class="it">ITEMS</span>
         <span class="act">Accounts</span>
-        <span class="rcv">Recievings</span>
-
+    
         
        
     </div><br><br>
@@ -163,8 +162,11 @@
     </div>
 
     <div class="accounts">
-        <h2>DEALER TABLE</h2>
-     <table>
+	<div>
+		<h2 id="dealerHead">DEALER TABLE</h2>
+		<div id="dealerTotal" class="dealerTotal"></div>
+	</div>
+     <table id="dealers_d">
          <tr>
              <th>DEALER</th>
              <th>GSTIN</th>
@@ -188,29 +190,7 @@
      </table>
     </div>
 
-    <div class="recievings" id="recieve">
-        <h2>RECIEVINGS TABLE</h2>
-     <table>
-         <tr>
-             <th>DEALER</th>
-             <th>DATE</th>
-             <th>AMOUNT</th>
-         </tr>
-         <tr>
-            {% if recievings %}
-            {% for r in recievings %}
-            <tr>
-                <td>{{ r.dealer.name }}</td>
-                <td>{{r.date}}</td>
-                <td>{{ r.amount}}</td>
-            </tr>
-            {% endfor %}
-       {% else %}
-            <p>NO DATA</p>
-       {% endif %}
-         </tr>
-     </table>
-    </div>
+    
 <script src="{% static 'stock/stocks.js' %}"></script>
 </body>
 </html>

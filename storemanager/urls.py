@@ -26,5 +26,4 @@ urlpatterns = [
     path('bills/',views.createBill,name='createbill'),
     path('accounts/',views.updateAccounts,name='updateaccounts'),
     path('',views.homepage,name='homepage'),
-    path('accounts/login/',views.index,name='index'),
 ]

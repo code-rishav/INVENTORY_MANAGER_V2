@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-61mmj!c4pc7*s)z2l^38=c=k$v@8itcxwonvyhx$s9js7-i(4t
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['13.55.89.137','localhost']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -78,10 +78,11 @@ WSGI_APPLICATION = "storemanager.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": 'inventorydb',
-        "USER": 'admin',
+        "NAME": 'postgres',
+        "USER": 'postgres',
         "PASSWORD": 'Iamrishav@0804',
-        "HOST": 'localhost'
+        "HOST": 'localhost',
+        "PORT": '5432',
     }
 }
 

@@ -162,7 +162,7 @@
   color: white;
   font-size: large;
   }
-  .price_s,.price_p{
+  .price_s,.price_p,.dealerTotal{
   
     transform: translate(70%,-50px);
     font-size: 40px;
