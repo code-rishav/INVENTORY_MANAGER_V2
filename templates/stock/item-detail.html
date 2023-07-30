@@ -1,0 +1,105 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'stock/stock.css' %}">
+    <link rel="stylesheet" href="{% static 'stock/item-detail.css' %}">
+    <title>ITEM DETAILS</title>
+</head>
+<body>
+    <div id="mysidenav" class="sidenav">
+        
+        <span><a href="{%url 'homepage'%}">BACK</a></span>
+        <span><a href="{% url 'homepage' %}">HOME</a></span> 
+       
+    </div>
+    <div class="container">
+       
+
+        <div class="item-info">
+            <h2>Item Name: {{item.name}}</h2>
+            <div class="purchase-info">
+                <h3>Total Purchase</h3>
+                <p>Quantity: {{pqty}}</p>
+                <p>Purchase Amount: {{pamt}}</p>
+            </div>
+
+            <div class="sale-info">
+                <h3>Total Sale</h3>
+                <p>Quantity: {{sqty}}</p>
+                <p>Sale Amount: {{samt}}</p>
+            </div>
+
+            <div class="filter">
+                <p>Apply Filter</p>
+                <form action="" method="post">
+                    <label for="start-date">Start Date</label>
+                    <input type="date"name="startDate" id="sdate_input">
+                    <label for="end-date">End Date</label>
+                    <input type="date"name="endDate" id="sdate_input2">
+                    <button type="submit">SUBMIT</button>
+                </form>
+            </div>
+        </div>
+        <div class="navbar">
+            <!-- Link to "PURCHASE" page -->
+            <a href="#" id="showPurchase" >PURCHASE</a>
+            <!-- Link to "SALE" page -->
+            <a href="#" id="showSale" >SALE</a>
+        </div>
+
+        <div class="table-container" id="purchase-data">
+            <table>
+                <tr>
+                    <th>Date</th>
+                    <th>Quantity</th>
+                    <th>Amount</th>
+                </tr>
+                {% if purchase %}
+                    {% for p in purchase %}
+                        <tr>
+                            <td>{{ p.date }}</td>
+                            <td>{{ p.quantity }}</td>
+                            <td>{{ p.amount }}</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="4" class="no-data">NO PURCHASE DATA</td>
+                    </tr>
+                {% endif %}
+            </table>
+        </div>
+
+        <div class="table-container" id="sale-data">
+            <table>
+                <tr>
+                    <th>Date</th>
+                    <th>Rate</th>
+                    <th>Quantity</th>
+                    <th>Amount</th>
+                    <th>Dealer</th>
+                </tr>
+                {% if sale %}
+                    {% for s in sale %}
+                        <tr>
+                            <td>{{ s.date }}</td>
+                            <td>{{ s.rate }}</td>
+                            <td>{{ s.quantity }}</td>
+                            <td>{{ s.amount }}</td>
+                            <td>{{ s.dealer }}</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="no-data">NO SALE DATA</td>
+                    </tr>
+                {% endif %}
+            </table>
+        </div>
+    </div>
+</body>
+<script src="{% static 'stock/item-detail.js'%}"></script>
+</html>

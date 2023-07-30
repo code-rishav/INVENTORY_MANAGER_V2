@@ -15,9 +15,17 @@ class Item(models.Model):
     def __str__(self):
         return self.name
     
-    def save(self,*args,**kwargs):
-        slug = slugify(self.name)
-        return super().save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        if self.pk:
+            original_item = Item.objects.get(pk=self.pk)
+            if original_item.name != self.name:
+                # Update related tables here
+                Purchase.objects.filter(item=original_item).update(item=self)
+                Sale.objects.filter(item=original_item).update(item=self)
+                Stock.objects.filter(item=original_item).update(item=self)
+                # Update other related tables similarly
+
+        super().save(*args, **kwargs)
         
     
     def get_absolute_url(self):
@@ -32,6 +40,13 @@ class Purchase(models.Model):
 
     def __str__(self):
         return f"Item name: {self.item}"
+    
+    def save(self,*args,**kwargs):
+        super().save(*args, **kwargs)
+        # Update stock quantity after a purchase
+        stock, _ = Stock.objects.get_or_create(item=self.item)
+        stock.quantity = stock.quantity + int(self.quantity)
+        stock.save()
     
 class Dealer(models.Model):
     name = models.CharField(max_length=60,primary_key=True,default='')
@@ -74,6 +89,10 @@ class Sale(models.Model):
     
     def save(self,*args,**kwargs):
         self.amount = self.quantity * self.rate
+        # Update stock quantity after a sale
+        stock, _ = Stock.objects.get_or_create(item=self.item)
+        stock.quantity = stock.quantity - int(self.quantity)
+        stock.save()
         return super().save(*args, **kwargs)
     
 

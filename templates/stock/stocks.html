@@ -149,7 +149,7 @@
             {% if items %}
             {% for p in items %}
             <tr>
-                <td>{{ p.name }}</td>
+                <td><a href="{% url 'item-detail' name=p.name%}" style="text-decoration: none; color:black">{{ p.name }}</a></td>
                 <td>{{p.mrp}}</td>
                 <td>{{p.invoice_rate}}</td>
             </tr>

@@ -102,3 +102,20 @@ function addItemTable(){
     itemsTable.appendChild(newRow);
 
 }
+
+  var src = '/entryF/'
+  $.ajax({
+    url: src,
+    type: 'GET',
+    success: function(response) {
+      if (response.error) {
+        // Display the error message in the alert container
+        alert(response.error);
+      }
+    },
+    error: function(xhr, textStatus, errorThrown) {
+      // Handle any errors that occur during the AJAX request
+      console.log(errorThrown);
+    }
+  });
+    

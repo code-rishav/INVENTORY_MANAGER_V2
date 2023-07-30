@@ -2,6 +2,8 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <div id="alert-container"></div>
+
     <title>ENTRY FORM </title>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600' rel='stylesheet' type='text/css'>
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
@@ -32,7 +34,12 @@
                 <label for="date">Order Date</label>
                 <input type="date" name="date">
               </div>
-
+              <select name="" id="">
+                <option value="">select item</option>
+                {%for item in items%}
+                  <option value="{{item.name}}">{{item.name}}</option>
+                {%endfor%}
+              </select>
               <div class="form-group">
                 <label for="item">Item Name</label>
               <input list="brow" name="item" placeholder="Item Name">
@@ -111,6 +118,7 @@
 
       
     </div>
-    <script src="{% static 'stock/form.js' %}"></script>
+    
+   
   </body>
 </html>

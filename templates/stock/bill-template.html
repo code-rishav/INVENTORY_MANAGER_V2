@@ -16,6 +16,7 @@
 
 	</head>
 	<body>
+    <div id="alert-container"></div>
 
         <div class="invoice-box" id="invoice-box">
             <center><h1>GST INVOICE</h1></center>
@@ -112,6 +113,10 @@
                   </datalist>
                 </div>
                 <div class="form-group">
+                  <input type="radio" name="type" value="box" checked> Box
+                  <input type="radio" name="type" value="packet"> Packet
+                </div>
+                <div class="form-group">
                   <label for="quantity">Quantity</label>
                   <input class="form-control" type="number" name="quantity"   id="quantity" >
                 </div>
@@ -131,7 +136,7 @@
                 <form action="" class="styled-form" name="newbuyerform" id="newbuyerform">
                     
                     <div class="form-group">
-                        <label for="buyer">Item Name</label>
+                        <label for="buyer">Dealer Name</label>
                         <input class="form-control" list="buyerlist" name="buyer" id="buyer" placeholder="Item Name">
                         <datalist id="buyerlist">
                           {% for b in buyer %}

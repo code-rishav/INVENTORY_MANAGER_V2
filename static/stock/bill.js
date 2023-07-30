@@ -1,58 +1,4 @@
 var cumTotal = 0
-function addItemToTable() {
-    // Get the values entered in the second form
-    var itemInput = document.querySelector('input[name="item"]');
-    var item = itemInput.value;
-    var quantity = document.getElementById("newItemForm").elements["quantity"].value;
-    var rate = document.getElementById("newItemForm").elements["rate"].value;
-
-    // Check if any of the fields are empty
-    if (item.trim() === '' || quantity.trim() === '' || rate.trim() === '') {
-        alert("Please fill in all the fields.");
-        return;
-    }
-
-    // Create a new row
-    var newRow = document.createElement("tr");
-	newRow.classList.add("item-list");
-
-    // Create table data cells and set their values
-    var itemCell = document.createElement("td");
-	itemCell.classList.add("item")
-    itemCell.textContent = item;
-
-    var rateCell = document.createElement("td");
-	rateCell.classList.add("rate");
-    rateCell.textContent = rate;
-
-
-    var quantityCell = document.createElement("td");
-	quantityCell.classList.add("quantity");
-    quantityCell.textContent = quantity;
-
-    var totalCell = document.createElement("td");
-	totalCell.classList.add("total")
-    var total = parseFloat(rate) * parseFloat(quantity);
-	cumTotal = cumTotal + total;
-    totalCell.textContent = total.toFixed(2); // Adjust decimal places as needed
-
-    // Append the cells to the new row
-    newRow.appendChild(itemCell);
-    newRow.appendChild(rateCell);
-    newRow.appendChild(quantityCell);
-    newRow.appendChild(totalCell);
-
-    // Append the new row to the table in the first form
-    var itemsTable = document.getElementById("itemsTable");
-    itemsTable.appendChild(newRow);
-
-	var cumSum = document.getElementById("totalAmount");
-	cumSum.textContent = cumTotal.toFixed(2);
-
-    // Reset the input fields of the second form
-	document.getElementById("newItemForm").reset()
-    
-}
 
 function deleteLastItemFromTable() {
 	// Get the reference to the table
@@ -116,9 +62,26 @@ function addDealer(){
 }
 
 function refreshPage(){
+	data=[];
 	window.location.reload();
 }
+function displayAlert(message) {
+	// Create the alert element
+	var alertElement = document.createElement('div');
+	alertElement.className = 'alert';
+	alertElement.textContent = message;
+  
+	// Add the alert to the container
+	var alertContainer = document.getElementById('alert-container');
+	alertContainer.appendChild(alertElement);
+  
+	// Optionally, set a timeout to remove the alert after a certain duration
+	setTimeout(function() {
+	  alertElement.remove();
+	}, 5000);  // Remove the alert after 5 seconds (adjust the duration as needed)
+  }
 
+  
 document.addEventListener('DOMContentLoaded', function() {
 	// Your code here
   });
@@ -171,41 +134,117 @@ function generatePDF(){
 	  
 	  document.getElementById("newItemForm").reset();
 }
+
+data = [];
+function addItemToTable() {
+    // Get the values entered in the second form
+    var itemInput = document.querySelector('input[name="item"]');
+    var item = itemInput.value;
+    var quantity = document.getElementById("newItemForm").elements["quantity"].value;
+    var rate = document.getElementById("newItemForm").elements["rate"].value;
+	var type = document.getElementById("newItemForm").elements["type"].value;
+
+
+    // Check if any of the fields are empty
+    if (item.trim() === '' || quantity.trim() === '' || rate.trim() === '') {
+        alert("Please fill in all the fields.");
+        return;
+    }
+
+    // Create a new row
+    var newRow = document.createElement("tr");
+	newRow.classList.add("item-list");
+
+    // Create table data cells and set their values
+    var itemCell = document.createElement("td");
+	itemCell.classList.add("item")
+    itemCell.textContent = item;
+
+    var rateCell = document.createElement("td");
+	rateCell.classList.add("rate");
+    rateCell.textContent = rate;
+
+	
+    var quantityCell = document.createElement("td");
+	quantityCell.classList.add("quantity");
+	if(type=="packet"){
+		quantityCell.textContent = quantity + " packets";
+	}
+	else{
+		quantityCell.textContent = quantity;
+	}
+    
+
+    var totalCell = document.createElement("td");
+	totalCell.classList.add("total")
+    var total = parseFloat(rate) * parseFloat(quantity);
+	cumTotal = cumTotal + total;
+    totalCell.textContent = total.toFixed(2); // Adjust decimal places as needed
+
+	//add a delete option
+	var delItem = document.createElement("button");
+	delItem.innerText = "DELETE";
+
+	
+
+	var deleteCell = document.createElement('td');
+	deleteCell.className = "exclude";	
+
+
+    deleteCell.appendChild(delItem);
+    // Append the cells to the new row
+    newRow.appendChild(itemCell);
+    newRow.appendChild(rateCell);
+    newRow.appendChild(quantityCell);
+    newRow.appendChild(totalCell);
+	newRow.appendChild(deleteCell);
+
+
+    // Append the new row to the table in the first form
+    var itemsTable = document.getElementById("itemsTable");
+    itemsTable.appendChild(newRow);
+
+	var cumSum = document.getElementById("totalAmount");
+	cumSum.textContent = cumTotal.toFixed(2);
+	rowData = {};
+	if(type=="box"){
+		rowData['item'] = item.trim();
+		rowData['quantity'] = quantity.trim();
+		rowData['rate'] = rate.trim();
+		rowData['total'] = total;
+		data.push(rowData);
+	}
+
+	delItem.addEventListener('click',function(){
+		itemsTable.removeChild(newRow);
+		cumTotal -= total;
+  
+		// Update the cumulative total display
+		var cumSum = document.getElementById("totalAmount");
+		cumSum.textContent = cumTotal.toFixed(2);
+	});
+	
+
+    // Reset the input fields of the second form
+	document.getElementById("newItemForm").reset()
+    
+}
+
   
 
 //to send the table data to backend
 $(document).ready(function() {
 	$('#generateBill').click(function() {
 	  
-	  var data = [];
-	  
-	  // Iterate over the table rows except for the header row
-	  $('#itemsTable tr.item-list').each(function(index, row) {
-		var rowData = {};
-
-            // Get the values from each cell in the row
-			var item = $(this).find('td.item').text().trim();
-			var quantity = $(this).find('td.quantity').text().trim();
-			var rate = $(this).find('td.rate').text().trim();
-			var total = $(this).find('td.total').text().trim();
-			
-            // Populate the rowData object
-
-            rowData['item'] = item;
-            rowData['quantity'] = quantity;
-			rowData['rate'] = rate;
-			rowData['total'] = total;
-
-            // Add the rowData object to the tableData array
-            data.push(rowData);
-	  });
-
 	  var buyer = document.getElementById("buyer-name").textContent;
 	  var total = document.getElementById("totalAmount").textContent;
 	  var invoiceid = document.getElementById("invoice-id").textContent;
 	  var invoicedate = document.getElementById("currentDate").textContent;
-	  
-
+	
+	  if(data == undefined){
+		alert("Empty Data");
+		return;
+	  }
 	  var requestData = {
 		dealer : buyer,
 		finalSum : total,
@@ -214,13 +253,7 @@ $(document).ready(function() {
 		tabledata : data
 	  };
 	  
-	 if(requestData == undefined){
-		alert("Empty Data");
-		return;
-	}
-	  
-
-
+	 
 	  
 	  // Send the AJAX request to the server
 	  var dest = "/bill/";
@@ -233,6 +266,7 @@ $(document).ready(function() {
 			// Handle the successful response from the server
 			// Refresh the page
 			generatePDF();
+			data=[];
 			window.location.reload()
 		},
 		error: function(xhr, textStatus, error) {
@@ -244,5 +278,19 @@ $(document).ready(function() {
 	
   });
 
-
- 	
+  var src = "/bill/"
+  $.ajax({
+	url: src,
+	type: 'GET',
+	success: function(response) {
+	  if (response.error) {
+		// Display the error message in the alert container
+		displayAlert(response.error);
+	  }
+	},
+	error: function(xhr, textStatus, errorThrown) {
+	  // Handle any errors that occur during the AJAX request
+	  console.log(errorThrown);
+	}
+  });
+  
